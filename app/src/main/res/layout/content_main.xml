@@ -12,9 +12,19 @@
     tools:context="com.example.grishma.broadcastreceiverexample.MainActivity"
     tools:showIn="@layout/activity_main">
 
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/whale"
+        android:id="@+id/whale"
+        android:layout_centerHorizontal="true"/>
+
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Send Broadcast"
-        android:onClick="handleClick"/>
+        android:onClick="downloadImage"
+        android:layout_below="@id/whale"
+        android:layout_centerHorizontal="true"/>
 </RelativeLayout>
