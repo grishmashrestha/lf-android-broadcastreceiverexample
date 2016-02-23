@@ -45,10 +45,18 @@ public class BroadCastReceiver extends BroadcastReceiver {
             HashMap<String, Integer> hashMap = (HashMap) intent.getSerializableExtra("size");
             Float downloadedSize = Float.parseFloat(String.valueOf(hashMap.get("downloadedSize")));
             Float totalSize = Float.parseFloat(String.valueOf(hashMap.get("totalSize")));
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                    .setSmallIcon(R.drawable.whale)
-                    .setContentTitle("File Downloading")
-                    .setContentText(Math.round((downloadedSize / totalSize) * 100) + "% completed.");
+            NotificationCompat.Builder builder;
+            if (((downloadedSize / totalSize) * 100)==100) {
+                 builder = new NotificationCompat.Builder(context)
+                        .setSmallIcon(R.drawable.whale)
+                        .setContentTitle("File Downloaded")
+                        .setContentText(Math.round((downloadedSize / totalSize) * 100) + "% completed.");
+            } else {
+                builder = new NotificationCompat.Builder(context)
+                       .setSmallIcon(R.drawable.whale)
+                        .setContentTitle("File Downloading")
+                        .setContentText(Math.round((downloadedSize / totalSize) * 100) + "% completed.");
+            }
 
             Intent resultIntent = new Intent(context, MainActivity.class);
 
