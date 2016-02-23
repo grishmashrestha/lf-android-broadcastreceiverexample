@@ -20,6 +20,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,12 +49,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         //registerReceiver(broadCastReceiver, new IntentFilter("myAction"));
-        registerReceiver(broadCastReceiver, new IntentFilter("abc"));
+//        registerReceiver(broadCastReceiver, new IntentFilter("abc"));
+        registerReceiver(broadCastReceiver, new IntentFilter("progressBar"));
     }
 
     @Override
     protected void onPause() {
-        //unregisterReceiver(broadCastReceiver);
+        unregisterReceiver(broadCastReceiver);
         Log.e("MainActivity", "unregistered");
         super.onPause();
     }
@@ -115,44 +118,21 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-
         }
     }
 
     public void downloadImage(View view) {
-
         new MyAsyncTask().execute();
-      /*  try {
-            URL url = new URL("http://www.clipartbest.com/cliparts/9i4/o8L/9i4o8LL6T.png");
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.connect();
-
-            File SDCardRoot = getFilesDir();
-
-            File file = new File(SDCardRoot, "test.png");
-            FileOutputStream fileOutput = new FileOutputStream(file);
-            InputStream inputStream = urlConnection.getInputStream();
-            int totalSize = urlConnection.getContentLength();
-            int downloadedSize = 0;
-            byte[] buffer = new byte[1024];
-            int bufferLength = 0;
-            while((bufferLength = inputStream.read(buffer)) > 0) {
-                fileOutput.write(buffer, 0, bufferLength);
-                downloadedSize += bufferLength;
-                updateProgress(downloadedSize, totalSize);
-            }
-            fileOutput.close();
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
     }
 
     public void updateProgress(int downloadedSize, int totalSize) {
-        System.out.println("123 ");
+        HashMap<String , Integer> hashMap = new HashMap<String, Integer>();
+        hashMap.put("downloadedSize", downloadedSize);
+        hashMap.put("totalSize", totalSize);
+
+        Intent intent = new Intent();
+        intent.putExtra("size", hashMap);
+        intent.setAction("progressBar");
+        sendBroadcast(intent);
     }
 }

@@ -6,9 +6,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -40,6 +40,29 @@ public class BroadCastReceiver extends BroadcastReceiver {
             rand=new Random();
             managerCompat.notify(rand.nextInt((100 - 1) + 1) + 1, builder.build());
 
+        } else if (intent.getAction().equals("progressBar")) {
+            Log.e("BroadcastReceiver", "in progressBar");
+            HashMap<String, Integer> hashMap = (HashMap) intent.getSerializableExtra("size");
+            Float downloadedSize = Float.parseFloat(String.valueOf(hashMap.get("downloadedSize")));
+            Float totalSize = Float.parseFloat(String.valueOf(hashMap.get("totalSize")));
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                    .setSmallIcon(R.drawable.whale)
+                    .setContentTitle("File Downloading")
+                    .setContentText(Math.round((downloadedSize / totalSize) * 100) + "% completed.");
+
+            Intent resultIntent = new Intent(context, MainActivity.class);
+
+            PendingIntent resultPendingIntent = PendingIntent.getActivity(
+                    context,
+                    0,
+                    resultIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT
+            );
+
+            builder.setContentIntent(resultPendingIntent);
+
+            NotificationManager managerCompat = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            managerCompat.notify(1, builder.build());
         }
     }
 
